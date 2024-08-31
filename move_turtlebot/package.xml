@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>move_turtlebot</name>
+  <version>0.0.1</version>
+  <description>A ROS2 package to move the robot using cmd_vel, with odometry uncertainty simulation.</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Dependencies -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_geometry_msgs</build_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_geometry_msgs</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
+
+  <!-- Export section -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
