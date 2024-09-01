@@ -25,6 +25,7 @@ public:
         x_ = 0.0;
         y_ = 0.0;
         theta_ = 0.0;
+        flag_ = false;
 
         // Timer to control the motion
         timer_ = this->create_wall_timer(
@@ -55,8 +56,18 @@ private:
 
             initialized_ = true;
 
-            RCLCPP_INFO(this->get_logger(), "Initial position set. x: %.3f, y: %.3f, theta: %.3f",
-                        initial_x_, initial_y_, initial_theta_);
+            RCLCPP_INFO(this->get_logger(), "Initial position set. x: %.2f, y: %.2f",
+                        initial_x_, initial_y_);
+        }
+        if(flag_)
+        {
+            final_x_ = msg->pose.pose.position.x;
+            final_y_ = msg->pose.pose.position.y;
+            RCLCPP_INFO(this->get_logger(), "Final position at. x: %.2f, y: %.2f",
+                        final_x_, final_y_);
+            RCLCPP_INFO(this->get_logger(), "Noisy final position at. x: %.2f, y: %.2f",
+            x_, y_);
+            flag_ = false;
         }
     }
 
@@ -81,6 +92,7 @@ private:
         if (traveled_distance >= distance && !destination_reached_)
         {
             destination_reached_ = true;
+            flag_ = true;
             RCLCPP_INFO(this->get_logger(), "Destination reached.");
         }
 
@@ -140,6 +152,8 @@ private:
     double last_x_, last_y_;
     bool initialized_;
     bool destination_reached_;
+    bool flag_;
+    double final_x_, final_y_;
 
     // Random number generator for Gaussian noise
     std::default_random_engine generator_;

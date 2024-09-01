@@ -24,17 +24,17 @@ install(TARGETS
   move_robot_node
   DESTINATION lib/${PROJECT_NAME})
 
-# Install launch files
-install(DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}/launch)
+# # Install launch files
+# install(DIRECTORY launch
+#   DESTINATION share/${PROJECT_NAME}/launch)
 
-# Install RViz configuration files (if any)
-install(DIRECTORY rviz
-  DESTINATION share/${PROJECT_NAME}/rviz)
+# # Install RViz configuration files (if any)
+# install(DIRECTORY rviz
+#   DESTINATION share/${PROJECT_NAME}/rviz)
 
-# Install params files (if any)
-install(DIRECTORY params
-  DESTINATION share/${PROJECT_NAME}/params)
+# # Install params files (if any)
+# install(DIRECTORY params
+#   DESTINATION share/${PROJECT_NAME}/params)
 
 # Mark executable as a test
 if(BUILD_TESTING)

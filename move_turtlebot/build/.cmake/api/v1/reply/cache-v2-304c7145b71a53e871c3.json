@@ -71,7 +71,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/home/student/ros2_ws/src/move_turtlebot/build/test_results"
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot/build/test_results"
 		},
 		{
 			"name" : "BUILD_TESTING",
@@ -123,11 +123,11 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."
 				}
 			],
 			"type" : "STRING",
-			"value" : "Debug"
+			"value" : ""
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -139,7 +139,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/student/ros2_ws/src/move_turtlebot/build"
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -163,7 +163,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "22"
+			"value" : "25"
 		},
 		{
 			"name" : "CMAKE_CACHE_PATCH_VERSION",
@@ -242,8 +242,8 @@
 					"value" : "CXX compiler"
 				}
 			],
-			"type" : "FILEPATH",
-			"value" : "/usr/bin/c++"
+			"type" : "STRING",
+			"value" : "/usr/bin/g++"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -370,8 +370,8 @@
 					"value" : "C compiler"
 				}
 			],
-			"type" : "FILEPATH",
-			"value" : "/usr/bin/cc"
+			"type" : "STRING",
+			"value" : "/usr/bin/gcc"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -598,12 +598,16 @@
 			"properties" : 
 			[
 				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "Enable/Disable output of compile commands during generation."
 				}
 			],
 			"type" : "BOOL",
-			"value" : "TRUE"
+			"value" : ""
 		},
 		{
 			"name" : "CMAKE_EXTRA_GENERATOR",
@@ -616,6 +620,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : ""
+		},
+		{
+			"name" : "CMAKE_FIND_PACKAGE_REDIRECTS_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake."
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -678,18 +694,6 @@
 			"value" : "1"
 		},
 		{
-			"name" : "CMAKE_HAVE_PTHREAD_H",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Have include pthread.h"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
 			"name" : "CMAKE_HOME_DIRECTORY",
 			"properties" : 
 			[
@@ -699,7 +703,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/student/ros2_ws/src/move_turtlebot"
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -987,7 +991,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/usr/share/cmake-3.22"
+			"value" : "/usr/share/cmake-3.25"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1459,7 +1463,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "labMGJSX0"
+			"value" : "chidalu"
 		},
 		{
 			"name" : "TinyXML2_DIR",
@@ -1472,6 +1476,18 @@
 			],
 			"type" : "PATH",
 			"value" : "TinyXML2_DIR-NOTFOUND"
+		},
+		{
+			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "linker supports push/pop state"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "TRUE"
 		},
 		{
 			"name" : "_OPENSSL_CFLAGS",
@@ -1894,6 +1910,30 @@
 			"value" : ""
 		},
 		{
+			"name" : "_Python3_Compiler_REASON_FAILURE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Compiler reason failure"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
+			"name" : "_Python3_Development_REASON_FAILURE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Development reason failure"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
 			"name" : "_Python3_EXECUTABLE",
 			"properties" : 
 			[
@@ -1928,6 +1968,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "0f3e53742e142b1d9e50e4ca5b901dd8"
+		},
+		{
+			"name" : "_Python3_NumPy_REASON_FAILURE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "NumPy reason failure"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
 		},
 		{
 			"name" : "__pkg_config_arguments__OPENSSL",
@@ -2395,7 +2447,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/move_turtlebot/build"
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot/build"
 		},
 		{
 			"name" : "move_turtlebot_IS_TOP_LEVEL",
@@ -2419,7 +2471,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/move_turtlebot"
+			"value" : "/home/chidalu/uni/scamzon/move_turtlebot"
 		},
 		{
 			"name" : "nav_msgs_DIR",
