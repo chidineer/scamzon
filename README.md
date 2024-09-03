@@ -22,6 +22,12 @@ export TURTLEBOT3_MODEL=waffle_pi
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
+## Launch Turtlebot3 World
+```bash
+export TURTLEBOT3_MODEL=waffle_pi 
+ros2 launch turtlebot3_gazebo turtlebot3_warehouse.launch.py
+```
+
 ## Launch Turtlebot3 House
 ```bash
 export TURTLEBOT3_MODEL=waffle_pi 
@@ -38,6 +44,12 @@ ros2 launch turtlebot3_bringup rviz2.launch.py
 ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
 ```
 
+## Localisation & Navigation Stack
+```bash
+export TURTLEBOT3_MODEL=waffle_pi 
+ros2 launch warehouse_navigation warehouse.launch.py
+```
+
 ## Launch GMapping
 ```bash
 ros2 launch turtlebot3_slam turtlebot3_slam.launch.py slam_methods:=gmapping use_sim_time:=True
@@ -48,12 +60,15 @@ ros2 launch turtlebot3_slam turtlebot3_slam.launch.py slam_methods:=gmapping use
 export TURTLEBOT3_MODEL=waffle_pi 
 ros2 run turtlebot3_teleop teleop_keyboard
 ```
+## RQT Plot for graph
+```bash
+ros2 run rqt_plot rqt_plot
+```
+Note: Need to be specific: /odom/pose/pose/position
 
 ## When in doubt
 ```bash
 source ~/.bashrc
-```
-```bash
 source ~/ros2_ws/install/setup.bash
 ```
 
