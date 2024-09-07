@@ -1,0 +1,10 @@
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/uninstall.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/localization_uninstall.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/scan_matcher.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/test.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/edit_cache.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/rebuild_cache.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/list_install_components.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/install.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/install/local.dir
+/home/student/RoboticsStudio1/git/scamzon/localization/build/CMakeFiles/install/strip.dir
