@@ -40,10 +40,9 @@ ros2 run scan_matcher_package scan_matcher /path/to/map.yaml
 ```
 The node will subscribe to /scan and /odom, perform scan matching, and publish the calculated yaw angle to the /sml_yaw topic.
 
-##Command-line Example
+### Command-line Example
 ```bash
-ros2 run scan_matcher_package scan_matcher 
-~/ros2_ws/maps/my_map.yaml
+ros2 run localization scan_matcher ~/ros2_ws/src/localization/src/small_warehouse.yaml
 ```
 ## Topics Used
 
