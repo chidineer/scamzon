@@ -35,7 +35,7 @@ source install/setup.bash
 Ensure you have a valid map file in YAML format (e.g., map.yaml), which specifies the resolution and origin of the map and references an associated image file (e.g., map.pgm).
 
 Run the node, providing the path to the map YAML file:
-````bash
+```bash
 ros2 run scan_matcher_package scan_matcher /path/to/map.yaml
 ```
 The node will subscribe to /scan and /odom, perform scan matching, and publish the calculated yaw angle to the /sml_yaw topic.
