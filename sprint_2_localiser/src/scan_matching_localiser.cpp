@@ -21,7 +21,7 @@ public:
 
         // Set up pubs
         cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-        yaw_pub_ = this->create_publisher<std_msgs::msg::Float64>("/localised_yaw", 10);
+        yaw_pub_ = this->create_publisher<std_msgs::msg::Float64>("/sml_yaw_tejas", 10);
 
         // Initialise Map File at startup, save in memory
         loadMapFromFile(map_yaml_path);

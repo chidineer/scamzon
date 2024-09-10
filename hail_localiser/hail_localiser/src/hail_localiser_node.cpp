@@ -24,7 +24,7 @@ public:
         command_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
 
         // Publisher for yaw angle in degrees
-        yaw_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/calculated_yaw", 10);
+        yaw_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/sml_yaw_sohail", 10);
 
         // Load the map from the YAML file
         loadMapData(yaml_path);

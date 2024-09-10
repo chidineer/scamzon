@@ -1,4 +1,4 @@
-image: updatedWarehouse_map2.pgm
+image: /home/student/ros2_ws/src/tejasWarehouse/updatedWarehouse_map2.pgm
 mode: trinary
 resolution: 0.05
 origin: [-3.56, -3.54, 0]

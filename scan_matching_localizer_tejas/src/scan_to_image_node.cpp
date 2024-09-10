@@ -31,7 +31,7 @@ ScanToImageNode::ScanToImageNode(const std::string& map_yaml_path)
             "/odom", 10, std::bind(&ScanToImageNode::odomCallback, this, std::placeholders::_1));
         
         // yaw publishers set up - mine, ground truth, amcl
-         yaw_publisher_ = this->create_publisher<geometry_msgs::msg::Vector3>("/my_yaw", 10);
+         yaw_publisher_ = this->create_publisher<geometry_msgs::msg::Vector3>("/sml_yaw_tejas", 10);
          yaw_publisher_tru_= this->create_publisher<geometry_msgs::msg::Vector3>("/true_yaw", 10);
          rmse_publisher_ = this->create_publisher<geometry_msgs::msg::Vector3>("/rmse_yaw", 10);
         // Create a publisher for yaw (Vector3 message)
