@@ -1,0 +1,100 @@
+# Scamazon Navigation Commands
+
+## Package
+
+# Compile
+cd ~/ros2_ws
+colcon build --packages-select scamazon_navigation
+
+# Node List
+reach_goals
+
+# Topic List
+
+# Launch Package
+ros2 run scamazon_navigation reach_goals
+
+ros2 run scamazon_navigation initial_pose_publisher
+
+
+
+## Testing
+# Launch World
+export TURTLEBOT3_MODEL=waffle_pi 
+ros2 launch turtlebot3_gazebo turtlebot3_GroupWarehouse.launch.py
+
+#Launch Nav2 for Navigation with Obstacle Avoidance - with map attached
+export TURTLEBOT3_MODEL=waffle_pi 
+ros2 launch turtlebot3_navigation2 navigation2.launch.py map:=/home/student/ros2_ws/src/tejasWarehouse/updatedWarehouse_map2.yaml
+
+# Send Test Goal
+ros2 topic pub -1 /scam_goals geometry_msgs/msg/PoseArray "{
+  header: {
+    stamp: {sec: 0, nanosec: 0},
+    frame_id: 'map'
+  },
+  poses: [
+    {
+      position: {x: 1.0483988668449455, y: 2.255698732562114, z: 0.007879028583577124},
+      orientation: {x: -0.000249344343532552, y: 0.003135925851572267, z: 0.07944968415343899, w: 0.9968339136909271}
+    }
+  ]
+}"
+
+ros2 topic pub -1 /goal_pose geometry_msgs/msg/PoseStamped "{
+  header: {
+    stamp: {sec: 0, nanosec: 0},
+    frame_id: 'map'
+  },
+  pose: {
+      position: {x: 1.0483988668449455, y: 2.255698732562114, z: 0.007879028583577124},
+      orientation: {x: -0.000249344343532552, y: 0.003135925851572267, z: 0.07944968415343899, w: 0.9968339136909271}
+    }
+}"
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+      
+      
+ros2 topic pub -1 /scam_goals geometry_msgs/msg/PoseArray "{
+  header: {
+    stamp: {sec: 0, nanosec: 0},
+    frame_id: 'map'
+  },
+  poses: [
+    {
+      position: {x: -2.137545702506908, y: -1.5624387226344125, z: 0.0},
+      orientation: {x: 0.0, y: 0.0, z: -0.8348775399611286, w: 0.5504357303704531}
+    },
+    {
+      position: {x: -1.9213270134257439, y: -0.2583457609854156, z: 0.0},
+      orientation: {x: 0.0, y: 0.0, z: 0.7972283159522016, w: 0.6036779043861195}
+    },
+    {
+      position: {x: 0.9542684696092879, y: 0.02285787721263426, z: 0.0},
+      orientation: {x: 0.0, y: 0.0, z: 0.6219379385848728, w: 0.7830665364761791}
+    },
+    {
+      position: {x: 0.9337033256706286, y: 2.4368324386930014, z: 0.0},
+      orientation: {x: 0.0, y: 0.0, z: 0.9945272879563003, w: 0.10447714348261133}
+    },
+    {
+      position: {x: 1.0157739312887828, y: 4.31022056800608, z: 0.0},
+      orientation: {x: 0.0, y: 0.0, z: 0.6172788347877957, w: 0.7867444566840119}
+
+    }
+  ]
+}"
+
+

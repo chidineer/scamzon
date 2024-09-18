@@ -1,0 +1,97 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-c19757d00cb4d4412a12.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "scamazon_navigation",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "initial_pose_publisher::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-initial_pose_publisher-Debug-fbe325aec8c90af9d878.json",
+					"name" : "initial_pose_publisher",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "path_optimizer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-path_optimizer-Debug-4a7ee24f913c1495f443.json",
+					"name" : "path_optimizer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "reach_goals::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-reach_goals-Debug-2a133bf2cd990e7bab16.json",
+					"name" : "reach_goals",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "scamazon_navigation_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-scamazon_navigation_uninstall-Debug-63fe34d6f02c2cbc431d.json",
+					"name" : "scamazon_navigation_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-af4a6cc91d8719635486.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/student/ros2_ws/src/scamazon_navigation/build",
+		"source" : "/home/student/ros2_ws/src/scamazon_navigation"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

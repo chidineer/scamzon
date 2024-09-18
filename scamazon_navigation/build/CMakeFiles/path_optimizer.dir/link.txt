@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpath_optimizer.a CMakeFiles/path_optimizer.dir/src/path_optimizer.cpp.o
+/usr/bin/ranlib libpath_optimizer.a

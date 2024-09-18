@@ -1,0 +1,4 @@
+source;share/scamazon_navigation/local_setup.bash
+source;share/scamazon_navigation/local_setup.dsv
+source;share/scamazon_navigation/local_setup.sh
+source;share/scamazon_navigation/local_setup.zsh
