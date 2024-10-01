@@ -36,7 +36,7 @@ public:
         cylinder_diameter_ = 0.30;
 
         // Load the map image
-        map_image_ = cv::imread("/home/student/ros2_ws/src/tejasWarehouse/updatedWarehouse_map2.pgm", cv::IMREAD_GRAYSCALE);
+        map_image_ = cv::imread("/home/student/ros2_ws/src/autonomous_robot/map/real_warehouse.pgm", cv::IMREAD_GRAYSCALE);
 
         if (map_image_.empty()) {
             RCLCPP_ERROR(this->get_logger(), "Failed to load the map image. Check if the file exists and is accessible.");
@@ -47,8 +47,8 @@ public:
 
         // Assume these map parameters (Adjust accordingly based on your map setup)
         map_resolution_ = 0.05;  // Map resolution in meters/pixel (adjust as necessary)
-        map_origin_x_ = -3.0;   // X origin of the map in meters (adjust as necessary)
-        map_origin_y_ = 0.0;   // Y origin of the map in meters (adjust as necessary)
+        map_origin_x_ = 9.5;   // X origin of the map in meters (adjust as necessary)
+        map_origin_y_ = 14.5;   // Y origin of the map in meters (adjust as necessary)
     }
 
 private:
@@ -201,10 +201,10 @@ private:
         // RCLCPP_INFO(this->get_logger(), "Cylinder center: (%.2f, %.2f)", cylinder_center.x, cylinder_center.y);
 
         // Convert global coordinates to map pixel coordinates
-        int map_x = static_cast<int>((cylinder_center.x - map_origin_x_) / map_resolution_);
+        int map_x = static_cast<int>((map_origin_x_ + cylinder_center.x) / map_resolution_);
 
         // Adjust the map_y calculation by taking the difference relative to the origin
-        int map_y = static_cast<int>((map_origin_y_ - cylinder_center.y) / map_resolution_);
+        int map_y = static_cast<int>((map_origin_y_ + cylinder_center.y) / map_resolution_);
 
         // Validate map coordinates
         if (map_x < 0 || map_x >= map_image_.cols || map_y < 0 || map_y >= map_image_.rows) {
