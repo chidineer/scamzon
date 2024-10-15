@@ -10,10 +10,6 @@ colcon build --symlink-install --packages-select autonomous_robot
 export TURTLEBOT3_MODEL=waffle_pi
 ros2 launch turtlebot3_gazebo turtlebot3_warehouse.launch.py use_sim_time:=true
 
-# Launch World
-export TURTLEBOT3_MODEL=waffle_pi
-ros2 launch turtlebot3_gazebo turtlebot3_GroupWarehouse.launch.py use_sim_time:=true
-
 # Autonomous Mapping 
 ros2 run autonomous_robot autonomous_mapping
 
@@ -27,6 +23,11 @@ ros2 service call /restart_explore_lite std_srvs/srv/Trigger
 
 # Save map manually
 ros2 service call /save_map std_srvs/srv/Trigger
+
+ros2 service call /cancel_goal std_srvs/srv/Trigger
+
+cd ~/ros2_ws/src/autonomous_robot/map
+ros2 run nav2_map_server map_saver_cli -f map
 
 # Localisation and Navigation
 ros2 run autonomous_robot localizer_and_navigation 0.0 0.0 0.0

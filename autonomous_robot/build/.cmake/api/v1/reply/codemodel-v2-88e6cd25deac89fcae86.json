@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-24ee098a38ee8d495996.json",
+					"jsonFile" : "directory-.-Debug-f9cc07d4b00e508a89b6.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.12"
@@ -19,7 +19,9 @@
 						0,
 						1,
 						2,
-						3
+						3,
+						4,
+						5
 					]
 				}
 			],
@@ -37,7 +39,9 @@
 						0,
 						1,
 						2,
-						3
+						3,
+						4,
+						5
 					]
 				}
 			],
@@ -46,7 +50,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "autonomous_mapping::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-autonomous_mapping-Debug-44cb3315954409f1aac9.json",
+					"jsonFile" : "target-autonomous_mapping-Debug-56bc52b52d9f90d0ceb5.json",
 					"name" : "autonomous_mapping",
 					"projectIndex" : 0
 				},
@@ -59,8 +63,22 @@
 				},
 				{
 					"directoryIndex" : 0,
+					"id" : "colour_detector::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-colour_detector-Debug-25e0d113c170e47b77d0.json",
+					"name" : "colour_detector",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cylinder_detector::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cylinder_detector-Debug-02aaa6b11756d9f3ec83.json",
+					"name" : "cylinder_detector",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "localizer_and_navigation::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-localizer_and_navigation-Debug-36d10407b920e0d14134.json",
+					"jsonFile" : "target-localizer_and_navigation-Debug-b8b407de1b450171f0e5.json",
 					"name" : "localizer_and_navigation",
 					"projectIndex" : 0
 				},

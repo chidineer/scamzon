@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcylinder_detector.a CMakeFiles/cylinder_detector.dir/src/cylinder_detector.cpp.o
+/usr/bin/ranlib libcylinder_detector.a

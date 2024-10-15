@@ -1,5 +1,7 @@
 /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/uninstall.dir
 /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/autonomous_robot_uninstall.dir
+/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/cylinder_detector.dir
+/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/colour_detector.dir
 /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/autonomous_mapping.dir
 /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/localizer_and_navigation.dir
 /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles/test.dir

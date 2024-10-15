@@ -2,6 +2,10 @@
 
 AutonomousMapping::AutonomousMapping() : Node("autonomous_mapping")
 {
+    // Record start time
+    auto start_time = std::chrono::high_resolution_clock::now();
+    auto start_setup = std::chrono::high_resolution_clock::now();
+
     // Create services for restarting exploration and saving map
     restart_explore_service_ = this->create_service<std_srvs::srv::Trigger>(
         "restart_explore_lite", std::bind(&AutonomousMapping::restartExploreLiteService, this, std::placeholders::_1, std::placeholders::_2));
@@ -11,7 +15,12 @@ AutonomousMapping::AutonomousMapping() : Node("autonomous_mapping")
 
     startEnvironment();   // Start the environment, then SLAM and Nav2
 
-    int explore_iterations = 3;  // Number of times to run explore lite
+    auto end_setup = std::chrono::high_resolution_clock::now();
+
+    // Calculate and print the elapsed time
+    auto setup_duration = std::chrono::duration_cast<std::chrono::seconds>(end_setup - start_setup);
+
+    int explore_iterations = 10;  // Number of times to run explore lite
     int explore_duration = 180;  // Duration for each run in seconds
 
     for (int i = 0; i < explore_iterations; ++i)
@@ -20,8 +29,17 @@ AutonomousMapping::AutonomousMapping() : Node("autonomous_mapping")
         std::this_thread::sleep_for(std::chrono::seconds(explore_duration));
         killExploreLite();
     }
+    // Record end time
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    // Calculate and print the elapsed time
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time);
     
+    RCLCPP_INFO(this->get_logger(), "Setup completed in %ld seconds", setup_duration.count());
+    RCLCPP_INFO(this->get_logger(), "Mapping task completed in %ld seconds", duration.count());
     saveMap();
+
+    
 }
 
 void AutonomousMapping::restartExploreLiteService(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,

@@ -36,13 +36,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 22,
+				"line" : 35,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 0,
-				"line" : 28,
+				"line" : 43,
 				"parent" : 0
 			},
 			{
@@ -222,19 +222,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 31,
+				"line" : 46,
 				"parent" : 0
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 32,
+				"line" : 47,
 				"parent" : 0
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 33,
+				"line" : 48,
 				"parent" : 0
 			}
 		]
@@ -262,6 +262,30 @@
 				"localizer_and_navigation"
 			],
 			"targetId" : "localizer_and_navigation::@6890427a1f51a3e7e1df",
+			"targetIndex" : 4,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib/autonomous_robot",
+			"paths" : 
+			[
+				"libcylinder_detector.a"
+			],
+			"targetId" : "cylinder_detector::@6890427a1f51a3e7e1df",
+			"targetIndex" : 3,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib/autonomous_robot",
+			"paths" : 
+			[
+				"libcolour_detector.a"
+			],
+			"targetId" : "colour_detector::@6890427a1f51a3e7e1df",
 			"targetIndex" : 2,
 			"type" : "target"
 		},

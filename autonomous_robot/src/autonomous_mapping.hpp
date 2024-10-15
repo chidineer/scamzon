@@ -23,6 +23,8 @@ public:
     void saveMapService(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
                         std::shared_ptr<std_srvs::srv::Trigger::Response> response);
 
+    
+
 private:
     void startEnvironment();
     void killExploreLite();

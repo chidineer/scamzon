@@ -1,0 +1,18 @@
+After Saving Map
+
+[INFO] [1727912706.194997015] [autonomous_mapping]: Killing explore lite...
+[INFO] [1727912706.228147002] [autonomous_mapping]: Setup completed in 15 seconds
+[INFO] [1727912706.228235403] [autonomous_mapping]: Mapping task completed in 1815 seconds
+[INFO] [1727912706.228310803] [autonomous_mapping]: Deleting existing map.pgm...
+[INFO] [1727912706.228677206] [autonomous_mapping]: Deleting existing map.yaml...
+[INFO] [1727912706.878721423] [map_saver]: 
+	map_saver lifecycle node launched. 
+	Waiting on external lifecycle transitions to activate
+	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[INFO] [1727912706.879133926] [map_saver]: Creating
+[INFO] [1727912706.883304562] [map_saver]: Configuring
+[INFO] [1727912706.898743496] [map_saver]: Saving map from 'map' topic to '/home/student/ros2_ws/src/autonomous_robot/map/map' file
+[WARN] [1727912706.899002298] [map_saver]: Free threshold unspecified. Setting it to default value: 0.250000
+[WARN] [1727912706.899028798] [map_saver]: Occupied threshold unspecified. Setting it to default value: 0.650000
+
+

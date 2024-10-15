@@ -24,6 +24,11 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
     amcl_sub_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>("/amcl_pose", 10,
                                                                                         std::bind(&LocalizerAndNavigation::amclCallback, this, std::placeholders::_1));
     goal_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/goal_pose", 10);
+    scan_subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+            "/scan", 10, std::bind(&LocalizerAndNavigation::laserScanCallback, this, std::placeholders::_1));
+    // Subscribe to the image_raw topic
+    image_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
+            "/camera/image_raw", 10, std::bind(&LocalizerAndNavigation::imageCallback, this, std::placeholders::_1));
 
     // Declare parameters for x, y, and yaw
     this->declare_parameter<float>("x", x);
@@ -35,7 +40,31 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
+    cancel_goal_ = this->create_service<std_srvs::srv::Trigger>(
+        "cancel_goal", std::bind(&LocalizerAndNavigation::cancelGoalService, this, std::placeholders::_1, std::placeholders::_2));
+
+    cylinderDetectorPtr_ = std::make_shared<CylinderDetector>();
+    colourDetectorPtr_ = std::make_shared<ColourDetector>();
+
     stateMachine();
+}
+
+void LocalizerAndNavigation::cancelGoalService(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+                                       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
+{
+    stopNavigation();
+    response->success = true;
+    response->message = "Goal Cancelled successfully.";
+}
+
+void LocalizerAndNavigation::stopNavigation(){
+
+    auto goal_msg = geometry_msgs::msg::PoseStamped();
+    goal_msg.header.stamp = this->now();
+    goal_msg.header.frame_id = "map";  // Make sure to set the correct frame
+    goal_msg.pose = current_pose_;
+    goal_pub_->publish(goal_msg);
+
 }
 
 void LocalizerAndNavigation::stateMachine(){
@@ -84,6 +113,11 @@ geometry_msgs::msg::Quaternion LocalizerAndNavigation::createQuaternionFromYaw(f
     return q;
 }
 
+void LocalizerAndNavigation::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg){
+    std::lock_guard<std::mutex> lock(mtx_);
+    scan_ = scan_msg;
+}
+
 void LocalizerAndNavigation::goalCallback(const geometry_msgs::msg::PoseArray::SharedPtr msg)
 {
     if (!msg->poses.empty())
@@ -100,6 +134,12 @@ void LocalizerAndNavigation::amclCallback(const geometry_msgs::msg::PoseWithCova
 {
     std::lock_guard<std::mutex> lock(mtx_);
     current_pose_ = msg->pose.pose;
+}
+
+void LocalizerAndNavigation::imageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    std::lock_guard<std::mutex> lock(mtx_);
+    image_ = msg;
 }
 
 bool LocalizerAndNavigation::isGoalReached(const geometry_msgs::msg::Pose &pose)
@@ -162,6 +202,16 @@ void LocalizerAndNavigation::publishNextGoal()
     }
 }
 
+double LocalizerAndNavigation::cylinderProximity(){
+
+    double distance_to_cylinder, x, y;
+    x = cylinderDetectorPtr_->detectCylinder(scan_).x;
+    y = cylinderDetectorPtr_->detectCylinder(scan_).y;
+    distance_to_cylinder = std::sqrt(x*x + y*y);
+    return distance_to_cylinder;
+
+}
+
 // State functions
 void LocalizerAndNavigation::runIdleState()
 {
@@ -184,8 +234,12 @@ void LocalizerAndNavigation::runRunningState()
         {
             RCLCPP_INFO(this->get_logger(), "Goal reached! Goal # %d of %d.", current_goal_index_ + 1, total_goals_);
             current_state_ = State::TASKED;
+        }
+        if(cylinderProximity() < 0.2){
+            RCLCPP_INFO(this->get_logger(), "The Cylinder is now within the Robots vicinity");
+            stopNavigation();
+        }
         lock.unlock();
-    }
     }
     else
     {
@@ -198,6 +252,8 @@ void LocalizerAndNavigation::runRunningState()
 void LocalizerAndNavigation::runTaskedState()
 {
     RCLCPP_INFO(this->get_logger(), "State: TASKED - Reached goal, waiting for tasks");
+
+    // colourDetectorPtr_->detectBox(image_);
 
     // If there are no tasks for this goal, move to the next goal
     current_goal_index_++;
