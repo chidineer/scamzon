@@ -45,6 +45,9 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
 
     cylinderDetectorPtr_ = std::make_shared<CylinderDetector>();
     colourDetectorPtr_ = std::make_shared<ColourDetector>();
+    tsp_solver_ = std::make_shared<tsp>();
+
+    resetStocktake();
 
     stateMachine();
 }
@@ -52,6 +55,7 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
 void LocalizerAndNavigation::cancelGoalService(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
                                        std::shared_ptr<std_srvs::srv::Trigger::Response> response)
 {
+    (void)request;
     stopNavigation();
     response->success = true;
     response->message = "Goal Cancelled successfully.";
@@ -64,6 +68,17 @@ void LocalizerAndNavigation::stopNavigation(){
     goal_msg.header.frame_id = "map";  // Make sure to set the correct frame
     goal_msg.pose = current_pose_;
     goal_pub_->publish(goal_msg);
+
+}
+
+void LocalizerAndNavigation::resetStocktake(){
+
+    count_.blue = 0;
+    count_.green = 0;
+    count_.yellow = 0;
+    count_.red = 0;
+    count_.orange = 0;
+    count_.purple = 0;
 
 }
 
@@ -122,6 +137,7 @@ void LocalizerAndNavigation::goalCallback(const geometry_msgs::msg::PoseArray::S
 {
     if (!msg->poses.empty())
     {
+        // goals_ = tsp_solver_->optimizePath(msg->poses);
         goals_ = msg->poses;
         total_goals_ = goals_.size();
         RCLCPP_INFO(this->get_logger(), "Received %lu goals", goals_.size());
@@ -146,7 +162,7 @@ bool LocalizerAndNavigation::isGoalReached(const geometry_msgs::msg::Pose &pose)
 {
     // Tolerances
     double position_tolerance = 0.5;  // Position tolerance (meters)
-    double orientation_tolerance = 1.0;  // Orientation tolerance (radians)
+    double orientation_tolerance = 0.5;  // Orientation tolerance (radians)
 
     // Current goal
     const auto &goal = goals_.front();
@@ -212,6 +228,64 @@ double LocalizerAndNavigation::cylinderProximity(){
 
 }
 
+void LocalizerAndNavigation::stocktakeReport() {
+    // Hardcoded filename and path
+    std::string filename = "/home/student/ros2_ws/src/autonomous_robot/stocktake/Stocktake_Report.txt";
+
+    // Open the file in append mode to add new content without overwriting
+    std::ofstream outfile(filename, std::ios::app);
+
+    // Check if the file is open
+    if (!outfile.is_open()) {
+        std::cerr << "Error: Could not open the file for writing." << std::endl;
+        return;
+    }
+
+    // Write new content to the file (you can replace this with your desired content)
+    std::string newContent = "Stocktake Report:\n\n";
+    outfile << newContent;
+
+    newContent = "Blue Boxes = " + std::to_string(count_.red) + "\n";
+    outfile << newContent;
+
+    newContent = "Yellow Boxes = " + std::to_string(count_.yellow) + "\n";
+    outfile << newContent;
+
+    newContent = "Blue Boxes = " + std::to_string(count_.blue) + "\n";
+    outfile << newContent;
+
+    newContent = "Green Boxes = " + std::to_string(count_.green) + "\n";
+    outfile << newContent;
+
+    newContent = "Orange Boxes = " + std::to_string(count_.orange) + "\n";
+    outfile << newContent;
+
+    newContent = "Purple Boxes = " + std::to_string(count_.purple) + "\n";
+    outfile << newContent;
+
+    // Close the file after writing
+    outfile.close();
+
+    // // Open the file again for reading (to display its content)
+    // std::ifstream infile(filename);
+
+    // // Check if the file is open
+    // if (!infile.is_open()) {
+    //     std::cerr << "Error: Could not open the file for reading." << std::endl;
+    //     return;
+    // }
+
+    // // Display the file content
+    // std::cout << "Content of " << filename << ":" << std::endl;
+    // std::string line;
+    // while (std::getline(infile, line)) {
+    //     std::cout << line << std::endl;
+    // }
+
+    // // Close the file after reading
+    // infile.close();
+}
+
 // State functions
 void LocalizerAndNavigation::runIdleState()
 {
@@ -235,14 +309,16 @@ void LocalizerAndNavigation::runRunningState()
             RCLCPP_INFO(this->get_logger(), "Goal reached! Goal # %d of %d.", current_goal_index_ + 1, total_goals_);
             current_state_ = State::TASKED;
         }
-        if(cylinderProximity() < 0.2){
-            RCLCPP_INFO(this->get_logger(), "The Cylinder is now within the Robots vicinity");
-            stopNavigation();
-        }
+        // if(cylinderProximity() < 0.2){
+        //     RCLCPP_INFO(this->get_logger(), "The Cylinder is now within the Robots vicinity");
+        //     stopNavigation();
+        // }
         lock.unlock();
     }
     else
     {
+        stocktakeReport();
+        resetStocktake();
         current_state_ = State::IDLE;  // No goals left
     }
     // RCLCPP_INFO(this->get_logger(), "Current state: %d", static_cast<int>(current_state_));
@@ -252,8 +328,38 @@ void LocalizerAndNavigation::runRunningState()
 void LocalizerAndNavigation::runTaskedState()
 {
     RCLCPP_INFO(this->get_logger(), "State: TASKED - Reached goal, waiting for tasks");
+    
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    // colourDetectorPtr_->detectBox(image_);
+    int current_box = colourDetectorPtr_->detectBox(image_);
+
+    switch(current_box)
+    {
+        case ProductColour::RED:
+            RCLCPP_INFO(this->get_logger(), "Red Box Detected");
+            count_.red++;
+            break;
+        case ProductColour::YELLOW:
+            RCLCPP_INFO(this->get_logger(), "Yellow Box Detected");
+            count_.yellow++;
+            break;
+        case ProductColour::BLUE:
+            RCLCPP_INFO(this->get_logger(), "Blue Box Detected");
+            count_.blue++;
+            break;
+        case ProductColour::GREEN:
+            RCLCPP_INFO(this->get_logger(), "Green Box Detected");
+            count_.green++;
+            break;
+        case ProductColour::ORANGE:
+            RCLCPP_INFO(this->get_logger(), "Orange Box Detected");
+            count_.orange++;
+            break;
+        case ProductColour::PURPLE:
+            RCLCPP_INFO(this->get_logger(), "Purple Box Detected");
+            count_.purple++;
+            break;
+    }
 
     // If there are no tasks for this goal, move to the next goal
     current_goal_index_++;

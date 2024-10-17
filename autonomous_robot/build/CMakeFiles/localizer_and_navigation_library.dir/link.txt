@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblocalizer_and_navigation_library.a CMakeFiles/localizer_and_navigation_library.dir/src/localizer_and_navigation.cpp.o
+/usr/bin/ranlib liblocalizer_and_navigation_library.a

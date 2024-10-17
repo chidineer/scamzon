@@ -11,10 +11,14 @@
 #include "cylinder_detector.hpp"
 #include <memory>
 #include <cmath>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "sensor_msgs/msg/image.hpp"
 #include "cv_bridge/cv_bridge.h"
 #include "opencv2/opencv.hpp"
 #include "colour_detector.hpp"
+#include "tsp.hpp"
 
 class LocalizerAndNavigation : public rclcpp::Node
 {
@@ -26,6 +30,25 @@ public:
         IDLE,
         RUNNING,
         TASKED
+    };
+
+    enum ProductColour {
+        RED,
+        YELLOW,
+        BLUE,
+        GREEN,
+        ORANGE,
+        PURPLE,
+        NOTHING
+    };
+
+    struct Stocktake {
+        unsigned int red;
+        unsigned int yellow;
+        unsigned int blue;
+        unsigned int green;
+        unsigned int orange;
+        unsigned int purple;
     };
     
     // Public methods for each state
@@ -41,6 +64,8 @@ public:
 
     double cylinderProximity();
     void stopNavigation();
+    void stocktakeReport();
+    void resetStocktake();
 
 private:
     void publishInitialPose(float x, float y, float yaw);
@@ -51,9 +76,7 @@ private:
     bool isGoalReached(const geometry_msgs::msg::Pose &pose);
     void publishNextGoal();
     geometry_msgs::msg::Quaternion createQuaternionFromYaw(float yaw);
-
     void stateMachine();
-
 
     rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr initial_pose_pub_;
     rclcpp::Subscription<geometry_msgs::msg::PoseArray>::SharedPtr goal_sub_;
@@ -72,6 +95,7 @@ private:
     sensor_msgs::msg::Image::SharedPtr image_;
 
     State current_state_;
+    Stocktake count_;
 
     geometry_msgs::msg::Pose current_pose_;
     int total_goals_;
@@ -79,6 +103,7 @@ private:
 
     std::shared_ptr<CylinderDetector> cylinderDetectorPtr_; // Shared pointer to clyinder detector class.
     std::shared_ptr<ColourDetector> colourDetectorPtr_; // Shared pointer to colour detector class.
+    std::shared_ptr<tsp> tsp_solver_;
 };
 
 #endif // LOCALIZER_AND_NAVIGATION_HPP

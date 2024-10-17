@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtsp.a CMakeFiles/tsp.dir/src/tsp.cpp.o
+/usr/bin/ranlib libtsp.a
