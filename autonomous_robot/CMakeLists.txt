@@ -88,8 +88,8 @@ if(BUILD_TESTING)
 endif()
 
 # Install other files
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
-install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
+# install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+# install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY ros_bags DESTINATION share/${PROJECT_NAME})
 
