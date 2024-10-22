@@ -3,8 +3,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 ColourDetector::ColourDetector() {
-    // Initialize OpenCV window (Optional)
-    cv::namedWindow("Camera View", cv::WINDOW_AUTOSIZE);
 }
 
 ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::Image::SharedPtr msg) {
@@ -29,16 +27,14 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
     cv::Scalar blue_lower(100, 150, 0), blue_upper(140, 255, 255);
     cv::Scalar yellow_lower(20, 100, 100), yellow_upper(30, 255, 255);
     cv::Scalar green_lower(40, 40, 40), green_upper(70, 255, 255);
-    cv::Scalar orange_lower(5, 150, 150), orange_upper(15, 255, 255);
     cv::Scalar purple_lower(130, 50, 50), purple_upper(160, 255, 255);
 
     // Create masks for each color
-    cv::Mat red_mask, blue_mask, yellow_mask, green_mask, orange_mask, purple_mask;
+    cv::Mat red_mask, blue_mask, yellow_mask, green_mask, purple_mask;
     cv::inRange(hsv_image, red_lower, red_upper, red_mask);
     cv::inRange(hsv_image, blue_lower, blue_upper, blue_mask);
     cv::inRange(hsv_image, yellow_lower, yellow_upper, yellow_mask);
     cv::inRange(hsv_image, green_lower, green_upper, green_mask);
-    cv::inRange(hsv_image, orange_lower, orange_upper, orange_mask);
     cv::inRange(hsv_image, purple_lower, purple_upper, purple_mask);
 
     // Calculate the area for each color mask
@@ -46,11 +42,10 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
     int blue_area = cv::countNonZero(blue_mask);
     int yellow_area = cv::countNonZero(yellow_mask);
     int green_area = cv::countNonZero(green_mask);
-    int orange_area = cv::countNonZero(orange_mask);
     int purple_area = cv::countNonZero(purple_mask);
 
     // Create an array of areas for easier comparison
-    int color_areas[] = { red_area, yellow_area, blue_area, green_area, orange_area, purple_area };
+    int color_areas[] = { red_area, yellow_area, blue_area, green_area, purple_area };
 
     // Find the index of the largest area
     int max_index = std::distance(color_areas, std::max_element(color_areas, color_areas + 6));
@@ -63,7 +58,6 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
         case 1: selected_mask = &yellow_mask; detected_color = "Yellow"; break;
         case 2: selected_mask = &blue_mask; detected_color = "Blue"; break;
         case 3: selected_mask = &green_mask; detected_color = "Green"; break;
-        case 4: selected_mask = &orange_mask; detected_color = "Orange"; break;
         case 5: selected_mask = &purple_mask; detected_color = "Purple"; break;
         default: return ColourDetector::NOTHING;  // Default in case of an error
     }
@@ -86,17 +80,12 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
                     cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);  // Label the box with color name
     }
 
-    // Show the image with the detected color
-    cv::imshow("Camera View", cv_image_ptr->image);
-    cv::waitKey(1);  // Display the frame for a short period (1 ms)
-
     // Return the detected color enum
     switch (max_index) {
         case 0: return ColourDetector::RED;
         case 1: return ColourDetector::YELLOW;
         case 2: return ColourDetector::BLUE;
         case 3: return ColourDetector::GREEN;
-        case 4: return ColourDetector::ORANGE;
         case 5: return ColourDetector::PURPLE;
         default: return ColourDetector::NOTHING;
     }

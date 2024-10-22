@@ -6389,6 +6389,14 @@
 		},
 		{
 			"isExternal" : true,
+			"path" : "/opt/ros/humble/share/rclpy/cmake/rclpyConfig-version.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/humble/share/rclpy/cmake/rclpyConfig.cmake"
+		},
+		{
+			"isExternal" : true,
 			"path" : "/opt/ros/humble/share/ament_cmake_gtest/cmake/ament_cmake_gtestConfig-version.cmake"
 		},
 		{

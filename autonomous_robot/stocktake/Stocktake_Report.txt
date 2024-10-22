@@ -4,5 +4,4 @@ Red Boxes = 6
 Yellow Boxes = 2
 Blue Boxes = 3
 Green Boxes = 3
-Orange Boxes = 0
 Purple Boxes = 4

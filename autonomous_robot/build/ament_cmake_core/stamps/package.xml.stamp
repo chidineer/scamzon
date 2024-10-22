@@ -28,6 +28,7 @@
   <depend>OpenCV</depend>
   <depend>rosbag2_cpp</depend>
   <depend>rclcpp_components</depend>
+  <depend>rclpy</depend>
 
   <!-- Test dependencies -->
   <test_depend>ament_lint_auto</test_depend>

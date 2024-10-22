@@ -488,6 +488,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/ros/humble/share/rclcpp_components/cmake/rclcpp_componentsConfig.cmake"
   "/opt/ros/humble/share/rclcpp_components/cmake/rclcpp_components_register_node.cmake"
   "/opt/ros/humble/share/rclcpp_components/cmake/rclcpp_components_register_nodes.cmake"
+  "/opt/ros/humble/share/rclpy/cmake/rclpyConfig-version.cmake"
+  "/opt/ros/humble/share/rclpy/cmake/rclpyConfig.cmake"
   "/opt/ros/humble/share/rcpputils/cmake/ament_cmake_export_dependencies-extras.cmake"
   "/opt/ros/humble/share/rcpputils/cmake/ament_cmake_export_include_directories-extras.cmake"
   "/opt/ros/humble/share/rcpputils/cmake/ament_cmake_export_libraries-extras.cmake"

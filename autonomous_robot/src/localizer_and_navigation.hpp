@@ -37,7 +37,6 @@ public:
         YELLOW,
         BLUE,
         GREEN,
-        ORANGE,
         PURPLE,
         NOTHING
     };
@@ -47,7 +46,6 @@ public:
         unsigned int yellow;
         unsigned int blue;
         unsigned int green;
-        unsigned int orange;
         unsigned int purple;
     };
     

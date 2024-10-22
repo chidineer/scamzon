@@ -16,7 +16,6 @@ public:
         YELLOW,
         BLUE,
         GREEN,
-        ORANGE,
         PURPLE,
         NOTHING
     };

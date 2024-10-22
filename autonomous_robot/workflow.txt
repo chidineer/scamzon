@@ -18,6 +18,9 @@ ros2 run nav2_map_server map_saver_cli -f map
 # Localisation and Navigation
 ros2 run autonomous_robot localizer_and_navigation 0.0 0.0 0.0
 
+python3 publish_goals.py
+
+
 
 
 

@@ -15,20 +15,20 @@
 	VendorID="Intel Corporation"
 	FamilyID="6"
 	ModelID="85"
-	ProcessorCacheSize="33792"
+	ProcessorCacheSize="36608"
 	NumberOfLogicalCPU="8"
 	NumberOfPhysicalCPU="4"
 	TotalVirtualMemory="0"
 	TotalPhysicalMemory="15979"
 	LogicalProcessorsPerPhysical="2"
-	ProcessorClockFrequency="2693.67"
+	ProcessorClockFrequency="2593.91"
 	>
 	<Testing>
-		<StartDateTime>Oct 22 21:09 UTC</StartDateTime>
-		<StartTestTime>1729631357</StartTestTime>
+		<StartDateTime>Oct 22 22:31 UTC</StartDateTime>
+		<StartTestTime>1729636275</StartTestTime>
 		<TestList/>
-		<EndDateTime>Oct 22 21:09 UTC</EndDateTime>
-		<EndTestTime>1729631357</EndTestTime>
+		<EndDateTime>Oct 22 22:31 UTC</EndDateTime>
+		<EndTestTime>1729636275</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

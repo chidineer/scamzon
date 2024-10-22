@@ -30,6 +30,7 @@ find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(ament_index_cpp REQUIRED)
+find_package(rclpy REQUIRED)
 
 # Libraries
 
@@ -59,6 +60,13 @@ install(TARGETS
   localizer_and_navigation_library
   DESTINATION lib/${PROJECT_NAME})
 
+# Install Python script
+install(
+  PROGRAMS
+    scripts/publish_goals.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 # Build testing
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
@@ -85,11 +93,6 @@ if(BUILD_TESTING)
 endif()
 
 # Install other files
-<<<<<<< HEAD
-=======
-# install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
-# install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
->>>>>>> 1e56ce650cd04bef6cf6c421ba358c3e661ad2dd
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY ros_bags DESTINATION share/${PROJECT_NAME})
 

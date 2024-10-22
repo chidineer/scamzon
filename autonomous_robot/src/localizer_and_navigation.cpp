@@ -50,7 +50,6 @@ void LocalizerAndNavigation::resetStocktake(){
     count_.green = 0;
     count_.yellow = 0;
     count_.red = 0;
-    count_.orange = 0;
     count_.purple = 0;
 
 }
@@ -128,6 +127,29 @@ void LocalizerAndNavigation::imageCallback(const sensor_msgs::msg::Image::Shared
 {
     std::lock_guard<std::mutex> lock(mtx_);
     image_ = msg;
+
+    // Convert the ROS image message to an OpenCV Mat in BGR format
+    cv::Mat img(cv::Size(msg->width, msg->height), CV_8UC3, const_cast<unsigned char*>(msg->data.data()), cv::Mat::AUTO_STEP);
+
+    // Now call the color detection function
+    ColourDetector::ProductColour detected_color = colourDetectorPtr_->detectBox(msg);
+
+    // Optionally, print the detected color to console
+    std::string color_name;
+    switch (detected_color) {
+        case ColourDetector::RED: color_name = "Red"; break;
+        case ColourDetector::YELLOW: color_name = "Yellow"; break;
+        case ColourDetector::BLUE: color_name = "Blue"; break;
+        case ColourDetector::GREEN: color_name = "Green"; break;
+        case ColourDetector::PURPLE: color_name = "Purple"; break;
+        default: color_name = "None"; break;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Detected color: %s", color_name.c_str());
+
+    // Display the image with bounding box and label (already drawn inside the detectBox function)
+    cv::imshow("Camera Feed", img);  // img is still in BGR format
+    cv::waitKey(1);  // Required for OpenCV to update the image window
 }
 
 bool LocalizerAndNavigation::isGoalReached(const geometry_msgs::msg::Pose &pose)
@@ -219,9 +241,6 @@ void LocalizerAndNavigation::stocktakeReport() {
     newContent = "Green Boxes = " + std::to_string(count_.green) + "\n";
     outfile << newContent;
 
-    newContent = "Orange Boxes = " + std::to_string(count_.orange) + "\n";
-    outfile << newContent;
-
     newContent = "Purple Boxes = " + std::to_string(count_.purple) + "\n";
     outfile << newContent;
 
@@ -292,10 +311,6 @@ void LocalizerAndNavigation::runTaskedState()
         case ProductColour::GREEN:
             RCLCPP_INFO(this->get_logger(), "Green Box Detected");
             count_.green++;
-            break;
-        case ProductColour::ORANGE:
-            RCLCPP_INFO(this->get_logger(), "Orange Box Detected");
-            count_.orange++;
             break;
         case ProductColour::PURPLE:
             RCLCPP_INFO(this->get_logger(), "Purple Box Detected");
