@@ -19,13 +19,12 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
 
     // Create publishers and subscribers
     initial_pose_pub_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("/initialpose", 10);
+    cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
     goal_sub_ = this->create_subscription<geometry_msgs::msg::PoseArray>("/scam_goals", 10,
                                                                          std::bind(&LocalizerAndNavigation::goalCallback, this, std::placeholders::_1));
     amcl_sub_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>("/amcl_pose", 10,
                                                                                         std::bind(&LocalizerAndNavigation::amclCallback, this, std::placeholders::_1));
     goal_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/goal_pose", 10);
-    scan_subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
-            "/scan", 10, std::bind(&LocalizerAndNavigation::laserScanCallback, this, std::placeholders::_1));
     // Subscribe to the image_raw topic
     image_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
             "/camera/image_raw", 10, std::bind(&LocalizerAndNavigation::imageCallback, this, std::placeholders::_1));
@@ -40,35 +39,9 @@ LocalizerAndNavigation::LocalizerAndNavigation(float x, float y, float yaw)
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
-    cancel_goal_ = this->create_service<std_srvs::srv::Trigger>(
-        "cancel_goal", std::bind(&LocalizerAndNavigation::cancelGoalService, this, std::placeholders::_1, std::placeholders::_2));
-
-    cylinderDetectorPtr_ = std::make_shared<CylinderDetector>();
     colourDetectorPtr_ = std::make_shared<ColourDetector>();
-    tsp_solver_ = std::make_shared<tsp>();
-
     resetStocktake();
-
     stateMachine();
-}
-
-void LocalizerAndNavigation::cancelGoalService(const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-                                       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
-{
-    (void)request;
-    stopNavigation();
-    response->success = true;
-    response->message = "Goal Cancelled successfully.";
-}
-
-void LocalizerAndNavigation::stopNavigation(){
-
-    auto goal_msg = geometry_msgs::msg::PoseStamped();
-    goal_msg.header.stamp = this->now();
-    goal_msg.header.frame_id = "map";  // Make sure to set the correct frame
-    goal_msg.pose = current_pose_;
-    goal_pub_->publish(goal_msg);
-
 }
 
 void LocalizerAndNavigation::resetStocktake(){
@@ -128,17 +101,16 @@ geometry_msgs::msg::Quaternion LocalizerAndNavigation::createQuaternionFromYaw(f
     return q;
 }
 
-void LocalizerAndNavigation::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg){
-    std::lock_guard<std::mutex> lock(mtx_);
-    scan_ = scan_msg;
-}
-
 void LocalizerAndNavigation::goalCallback(const geometry_msgs::msg::PoseArray::SharedPtr msg)
 {
     if (!msg->poses.empty())
     {
-        // goals_ = tsp_solver_->optimizePath(msg->poses);
-        goals_ = msg->poses;
+        std::unique_lock<std::mutex> lock(mtx_);
+        geometry_msgs::msg::Pose start = current_pose_;
+        lock.unlock();
+        tsp_solver_ = std::make_shared<tsp>(start);
+        std::vector<unsigned int> path = tsp_solver_->optimizePath(*msg);
+        goals_ = tsp_solver_->mapGoalsToOptimizedOrder(*msg, path);
         total_goals_ = goals_.size();
         RCLCPP_INFO(this->get_logger(), "Received %lu goals", goals_.size());
         current_goal_index_ = 0;
@@ -218,22 +190,12 @@ void LocalizerAndNavigation::publishNextGoal()
     }
 }
 
-double LocalizerAndNavigation::cylinderProximity(){
-
-    double distance_to_cylinder, x, y;
-    x = cylinderDetectorPtr_->detectCylinder(scan_).x;
-    y = cylinderDetectorPtr_->detectCylinder(scan_).y;
-    distance_to_cylinder = std::sqrt(x*x + y*y);
-    return distance_to_cylinder;
-
-}
-
 void LocalizerAndNavigation::stocktakeReport() {
     // Hardcoded filename and path
     std::string filename = "/home/student/ros2_ws/src/autonomous_robot/stocktake/Stocktake_Report.txt";
 
-    // Open the file in append mode to add new content without overwriting
-    std::ofstream outfile(filename, std::ios::app);
+    // Open the file in truncate mode to remove all contents
+    std::ofstream outfile(filename, std::ios::trunc);
 
     // Check if the file is open
     if (!outfile.is_open()) {
@@ -245,7 +207,7 @@ void LocalizerAndNavigation::stocktakeReport() {
     std::string newContent = "Stocktake Report:\n\n";
     outfile << newContent;
 
-    newContent = "Blue Boxes = " + std::to_string(count_.red) + "\n";
+    newContent = "Red Boxes = " + std::to_string(count_.red) + "\n";
     outfile << newContent;
 
     newContent = "Yellow Boxes = " + std::to_string(count_.yellow) + "\n";
@@ -266,24 +228,6 @@ void LocalizerAndNavigation::stocktakeReport() {
     // Close the file after writing
     outfile.close();
 
-    // // Open the file again for reading (to display its content)
-    // std::ifstream infile(filename);
-
-    // // Check if the file is open
-    // if (!infile.is_open()) {
-    //     std::cerr << "Error: Could not open the file for reading." << std::endl;
-    //     return;
-    // }
-
-    // // Display the file content
-    // std::cout << "Content of " << filename << ":" << std::endl;
-    // std::string line;
-    // while (std::getline(infile, line)) {
-    //     std::cout << line << std::endl;
-    // }
-
-    // // Close the file after reading
-    // infile.close();
 }
 
 // State functions
@@ -309,10 +253,6 @@ void LocalizerAndNavigation::runRunningState()
             RCLCPP_INFO(this->get_logger(), "Goal reached! Goal # %d of %d.", current_goal_index_ + 1, total_goals_);
             current_state_ = State::TASKED;
         }
-        // if(cylinderProximity() < 0.2){
-        //     RCLCPP_INFO(this->get_logger(), "The Cylinder is now within the Robots vicinity");
-        //     stopNavigation();
-        // }
         lock.unlock();
     }
     else
@@ -327,11 +267,13 @@ void LocalizerAndNavigation::runRunningState()
 
 void LocalizerAndNavigation::runTaskedState()
 {
-    RCLCPP_INFO(this->get_logger(), "State: TASKED - Reached goal, waiting for tasks");
+    RCLCPP_INFO(this->get_logger(), "State: TASKED - Reached goal, performing tasks");
     
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
+    std::unique_lock<std::mutex> lock(mtx_);
     int current_box = colourDetectorPtr_->detectBox(image_);
+    lock.unlock();
 
     switch(current_box)
     {
@@ -361,7 +303,7 @@ void LocalizerAndNavigation::runTaskedState()
             break;
     }
 
-    // If there are no tasks for this goal, move to the next goal
+    // If there are no tasks left for this goal, move to the next goal
     current_goal_index_++;
     current_state_ = State::RUNNING;
     goals_.erase(goals_.begin());

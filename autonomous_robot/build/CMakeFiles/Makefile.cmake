@@ -1106,7 +1106,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/uninstall.dir/DependInfo.cmake"
   "CMakeFiles/autonomous_robot_uninstall.dir/DependInfo.cmake"
-  "CMakeFiles/cylinder_detector.dir/DependInfo.cmake"
   "CMakeFiles/colour_detector.dir/DependInfo.cmake"
   "CMakeFiles/tsp.dir/DependInfo.cmake"
   "CMakeFiles/localizer_and_navigation_library.dir/DependInfo.cmake"

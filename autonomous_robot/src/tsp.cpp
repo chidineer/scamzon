@@ -2,7 +2,7 @@
 #include <cmath>
 #include <limits>
 
-tsp::tsp() {}
+tsp::tsp(geometry_msgs::msg::Pose start) : start_(start) {}
 
 double tsp::calculateDistance(const geometry_msgs::msg::Pose &a, const geometry_msgs::msg::Pose &b) {
     double dx = a.position.x - b.position.x;
@@ -11,7 +11,8 @@ double tsp::calculateDistance(const geometry_msgs::msg::Pose &a, const geometry_
 }
 
 // Function to return the optimized path as a vector of indices
-std::vector<unsigned int> tsp::optimizePath(const geometry_msgs::msg::PoseArray &poses) {
+std::vector<unsigned int> tsp::optimizePath(geometry_msgs::msg::PoseArray &poses) {
+    poses.poses.insert(poses.poses.begin(), start_);
     std::vector<unsigned int> optimized_indices;
     std::vector<bool> visited(poses.poses.size(), false);
 
@@ -40,6 +41,14 @@ std::vector<unsigned int> tsp::optimizePath(const geometry_msgs::msg::PoseArray 
         visited[nearestIndex] = true;
         currentIndex = nearestIndex;
     }
+
+    optimized_indices.erase(optimized_indices.begin());
+
+    for(size_t i = 0; i < optimized_indices.size(); i++){
+        optimized_indices.at(i) = optimized_indices.at(i) - 1;
+    }
+
+    poses.poses.erase(poses.poses.begin());
 
     return optimized_indices;
 }

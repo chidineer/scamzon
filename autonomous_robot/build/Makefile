@@ -198,19 +198,6 @@ autonomous_robot_uninstall/fast:
 .PHONY : autonomous_robot_uninstall/fast
 
 #=============================================================================
-# Target rules for targets named cylinder_detector
-
-# Build rule for target.
-cylinder_detector: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cylinder_detector
-.PHONY : cylinder_detector
-
-# fast build rule for target.
-cylinder_detector/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/build
-.PHONY : cylinder_detector/fast
-
-#=============================================================================
 # Target rules for targets named colour_detector
 
 # Build rule for target.
@@ -425,30 +412,6 @@ src/colour_detector.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/colour_detector.dir/build.make CMakeFiles/colour_detector.dir/src/colour_detector.cpp.s
 .PHONY : src/colour_detector.cpp.s
 
-src/cylinder_detector.o: src/cylinder_detector.cpp.o
-.PHONY : src/cylinder_detector.o
-
-# target to build an object file
-src/cylinder_detector.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/src/cylinder_detector.cpp.o
-.PHONY : src/cylinder_detector.cpp.o
-
-src/cylinder_detector.i: src/cylinder_detector.cpp.i
-.PHONY : src/cylinder_detector.i
-
-# target to preprocess a source file
-src/cylinder_detector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/src/cylinder_detector.cpp.i
-.PHONY : src/cylinder_detector.cpp.i
-
-src/cylinder_detector.s: src/cylinder_detector.cpp.s
-.PHONY : src/cylinder_detector.s
-
-# target to generate assembly for a file
-src/cylinder_detector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/src/cylinder_detector.cpp.s
-.PHONY : src/cylinder_detector.cpp.s
-
 src/localizer_and_navigation.o: src/localizer_and_navigation.cpp.o
 .PHONY : src/localizer_and_navigation.o
 
@@ -641,7 +604,6 @@ help:
 	@echo "... TASKALLOCATION"
 	@echo "... autonomous_mapping"
 	@echo "... colour_detector"
-	@echo "... cylinder_detector"
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... localizer_and_navigation"
@@ -656,9 +618,6 @@ help:
 	@echo "... src/colour_detector.o"
 	@echo "... src/colour_detector.i"
 	@echo "... src/colour_detector.s"
-	@echo "... src/cylinder_detector.o"
-	@echo "... src/cylinder_detector.i"
-	@echo "... src/cylinder_detector.s"
 	@echo "... src/localizer_and_navigation.o"
 	@echo "... src/localizer_and_navigation.i"
 	@echo "... src/localizer_and_navigation.s"

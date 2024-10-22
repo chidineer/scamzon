@@ -63,7 +63,6 @@ CMAKE_BINARY_DIR = /home/student/ros2_ws/src/autonomous_robot/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/cylinder_detector.dir/all
 all: CMakeFiles/colour_detector.dir/all
 all: CMakeFiles/tsp.dir/all
 all: CMakeFiles/localizer_and_navigation_library.dir/all
@@ -83,7 +82,6 @@ preinstall: gtest/preinstall
 # The main recursive "clean" target.
 clean: CMakeFiles/uninstall.dir/clean
 clean: CMakeFiles/autonomous_robot_uninstall.dir/clean
-clean: CMakeFiles/cylinder_detector.dir/clean
 clean: CMakeFiles/colour_detector.dir/clean
 clean: CMakeFiles/tsp.dir/clean
 clean: CMakeFiles/localizer_and_navigation_library.dir/clean
@@ -165,32 +163,6 @@ CMakeFiles/autonomous_robot_uninstall.dir/clean:
 .PHONY : CMakeFiles/autonomous_robot_uninstall.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/cylinder_detector.dir
-
-# All Build rule for target.
-CMakeFiles/cylinder_detector.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=14,15 "Built target cylinder_detector"
-.PHONY : CMakeFiles/cylinder_detector.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/cylinder_detector.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cylinder_detector.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles 0
-.PHONY : CMakeFiles/cylinder_detector.dir/rule
-
-# Convenience name for target.
-cylinder_detector: CMakeFiles/cylinder_detector.dir/rule
-.PHONY : cylinder_detector
-
-# clean rule for target.
-CMakeFiles/cylinder_detector.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cylinder_detector.dir/build.make CMakeFiles/cylinder_detector.dir/clean
-.PHONY : CMakeFiles/cylinder_detector.dir/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/colour_detector.dir
 
 # All Build rule for target.
@@ -223,7 +195,7 @@ CMakeFiles/colour_detector.dir/clean:
 CMakeFiles/tsp.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tsp.dir/build.make CMakeFiles/tsp.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tsp.dir/build.make CMakeFiles/tsp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=25,26 "Built target tsp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=23,24 "Built target tsp"
 .PHONY : CMakeFiles/tsp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -249,7 +221,7 @@ CMakeFiles/tsp.dir/clean:
 CMakeFiles/localizer_and_navigation_library.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/localizer_and_navigation_library.dir/build.make CMakeFiles/localizer_and_navigation_library.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/localizer_and_navigation_library.dir/build.make CMakeFiles/localizer_and_navigation_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=23,24 "Built target localizer_and_navigation_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=21,22 "Built target localizer_and_navigation_library"
 .PHONY : CMakeFiles/localizer_and_navigation_library.dir/all
 
 # Build rule for subdir invocation for target.
@@ -298,17 +270,16 @@ CMakeFiles/autonomous_mapping.dir/clean:
 # Target rules for target CMakeFiles/localizer_and_navigation.dir
 
 # All Build rule for target.
-CMakeFiles/localizer_and_navigation.dir/all: CMakeFiles/cylinder_detector.dir/all
 CMakeFiles/localizer_and_navigation.dir/all: CMakeFiles/colour_detector.dir/all
 CMakeFiles/localizer_and_navigation.dir/all: CMakeFiles/tsp.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/localizer_and_navigation.dir/build.make CMakeFiles/localizer_and_navigation.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/localizer_and_navigation.dir/build.make CMakeFiles/localizer_and_navigation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=20,21,22 "Built target localizer_and_navigation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=18,19,20 "Built target localizer_and_navigation"
 .PHONY : CMakeFiles/localizer_and_navigation.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/localizer_and_navigation.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/localizer_and_navigation.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles 0
 .PHONY : CMakeFiles/localizer_and_navigation.dir/rule
@@ -441,7 +412,7 @@ CMakeFiles/TASKALLOCATION.dir/clean:
 gtest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f gtest/CMakeFiles/gtest.dir/build.make gtest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/CMakeFiles/gtest.dir/build.make gtest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=16,17 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=14,15 "Built target gtest"
 .PHONY : gtest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -467,7 +438,7 @@ gtest/CMakeFiles/gtest.dir/clean:
 gtest/CMakeFiles/gtest_main.dir/all:
 	$(MAKE) $(MAKESILENT) -f gtest/CMakeFiles/gtest_main.dir/build.make gtest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/CMakeFiles/gtest_main.dir/build.make gtest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=18,19 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/ros2_ws/src/autonomous_robot/build/CMakeFiles --progress-num=16,17 "Built target gtest_main"
 .PHONY : gtest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.

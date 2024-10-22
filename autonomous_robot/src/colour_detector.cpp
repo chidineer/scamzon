@@ -1,7 +1,10 @@
 #include "colour_detector.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
-ColourDetector::ColourDetector(){
-
+ColourDetector::ColourDetector() {
+    // Initialize OpenCV window (Optional)
+    cv::namedWindow("Camera View", cv::WINDOW_AUTOSIZE);
 }
 
 ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::Image::SharedPtr msg) {
@@ -14,27 +17,20 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
     }
     catch (cv_bridge::Exception &e)
     {
-        return ColourDetector::NOTHING;; // Return a default value or handle this case appropriately
+        return ColourDetector::NOTHING;  // Return a default value or handle this case appropriately
     }
 
     // Convert the image to HSV color space
     cv::Mat hsv_image;
     cv::cvtColor(cv_image_ptr->image, hsv_image, cv::COLOR_BGR2HSV);
 
-    // Define color ranges and create masks
+    // Define color ranges
     cv::Scalar red_lower(0, 100, 0), red_upper(10, 255, 255);
     cv::Scalar blue_lower(100, 150, 0), blue_upper(140, 255, 255);
     cv::Scalar yellow_lower(20, 100, 100), yellow_upper(30, 255, 255);
     cv::Scalar green_lower(40, 40, 40), green_upper(70, 255, 255);
     cv::Scalar orange_lower(5, 150, 150), orange_upper(15, 255, 255);
     cv::Scalar purple_lower(130, 50, 50), purple_upper(160, 255, 255);
-
-    // <color>1.0 0.0 0.0 1.0</color> <!-- Red color -->
-    // <color>1.0 1.0 0.0 1.0</color> <!-- Yellow color -->
-    // <color>0.0 0.0 1.0 1.0</color> <!-- Blue color -->
-    // <color>0.0 1.0 0.0 1.0</color> <!-- Green color -->
-    // <color>1.0 0.5 0.0 1.0</color> <!-- Orange color -->
-    // <color>0.5 0.0 0.5 1.0</color> <!-- Purple color -->
 
     // Create masks for each color
     cv::Mat red_mask, blue_mask, yellow_mask, green_mask, orange_mask, purple_mask;
@@ -59,7 +55,42 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
     // Find the index of the largest area
     int max_index = std::distance(color_areas, std::max_element(color_areas, color_areas + 6));
 
-    // Return the corresponding enumerator value
+    // Select the corresponding mask and label
+    cv::Mat *selected_mask = nullptr;
+    std::string detected_color;
+    switch (max_index) {
+        case 0: selected_mask = &red_mask; detected_color = "Red"; break;
+        case 1: selected_mask = &yellow_mask; detected_color = "Yellow"; break;
+        case 2: selected_mask = &blue_mask; detected_color = "Blue"; break;
+        case 3: selected_mask = &green_mask; detected_color = "Green"; break;
+        case 4: selected_mask = &orange_mask; detected_color = "Orange"; break;
+        case 5: selected_mask = &purple_mask; detected_color = "Purple"; break;
+        default: return ColourDetector::NOTHING;  // Default in case of an error
+    }
+
+    // Find contours on the selected mask
+    std::vector<std::vector<cv::Point>> contours;
+    cv::findContours(*selected_mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    if (!contours.empty()) {
+        // Find the largest contour
+        auto largest_contour = std::max_element(contours.begin(), contours.end(),
+            [](const std::vector<cv::Point> &c1, const std::vector<cv::Point> &c2) {
+                return cv::contourArea(c1) < cv::contourArea(c2);
+            });
+
+        // Draw the bounding box around the largest contour
+        cv::Rect bounding_box = cv::boundingRect(*largest_contour);
+        cv::rectangle(cv_image_ptr->image, bounding_box, cv::Scalar(0, 255, 0), 2);  // Green bounding box
+        cv::putText(cv_image_ptr->image, detected_color, cv::Point(bounding_box.x, bounding_box.y - 10),
+                    cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);  // Label the box with color name
+    }
+
+    // Show the image with the detected color
+    cv::imshow("Camera View", cv_image_ptr->image);
+    cv::waitKey(1);  // Display the frame for a short period (1 ms)
+
+    // Return the detected color enum
     switch (max_index) {
         case 0: return ColourDetector::RED;
         case 1: return ColourDetector::YELLOW;
@@ -67,7 +98,6 @@ ColourDetector::ProductColour ColourDetector::detectBox(const sensor_msgs::msg::
         case 3: return ColourDetector::GREEN;
         case 4: return ColourDetector::ORANGE;
         case 5: return ColourDetector::PURPLE;
-        default: return ColourDetector::NOTHING;  // Default in case of an error
+        default: return ColourDetector::NOTHING;
     }
 }
-

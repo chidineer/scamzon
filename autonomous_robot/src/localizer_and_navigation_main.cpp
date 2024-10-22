@@ -17,26 +17,6 @@ int main(int argc, char **argv)
 
     auto node = std::make_shared<LocalizerAndNavigation>(x, y, yaw);
 
-    // rclcpp::Rate rate(2);  // 2 Hz loop rate
-    // while (rclcpp::ok())
-    // {
-    //     switch (node->getCurrentState())  // Use the getter to access current state
-    //     {
-    //     case LocalizerAndNavigation::State::IDLE:
-    //         node->runIdleState();
-    //         break;
-    //     case LocalizerAndNavigation::State::RUNNING:
-    //         node->runRunningState();
-    //         break;
-    //     case LocalizerAndNavigation::State::TASKED:
-    //         node->runTaskedState();
-    //         break;
-    //     }
-
-    //     rclcpp::spin_some(node);
-    //     rate.sleep();
-    // }
-
     rclcpp::shutdown();
     return 0;
 }

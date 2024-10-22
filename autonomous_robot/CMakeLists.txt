@@ -32,8 +32,6 @@ find_package(rosbag2_cpp REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 
 # Libraries
-add_library(cylinder_detector src/cylinder_detector.cpp)
-ament_target_dependencies(cylinder_detector rclcpp sensor_msgs tf2 tf2_geometry_msgs)
 
 add_library(colour_detector src/colour_detector.cpp)
 ament_target_dependencies(colour_detector rclcpp sensor_msgs cv_bridge OpenCV)
@@ -50,13 +48,12 @@ ament_target_dependencies(autonomous_mapping rclcpp sensor_msgs nav_msgs geometr
 
 add_executable(localizer_and_navigation src/localizer_and_navigation.cpp src/localizer_and_navigation_main.cpp)
 ament_target_dependencies(localizer_and_navigation rclcpp sensor_msgs nav_msgs geometry_msgs nav2_msgs std_srvs cv_bridge OpenCV)
-target_link_libraries(localizer_and_navigation cylinder_detector colour_detector tsp)
+target_link_libraries(localizer_and_navigation colour_detector tsp)
 
 # Install targets
 install(TARGETS
   autonomous_mapping
   localizer_and_navigation
-  cylinder_detector
   colour_detector
   tsp
   localizer_and_navigation_library
@@ -88,8 +85,6 @@ if(BUILD_TESTING)
 endif()
 
 # Install other files
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
-install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY ros_bags DESTINATION share/${PROJECT_NAME})
 

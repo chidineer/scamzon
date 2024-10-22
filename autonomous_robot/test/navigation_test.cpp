@@ -13,7 +13,7 @@
 TEST(LocalizerAndNavigation, TestLocalization)
 {
     std::string package_share_directory = ament_index_cpp::get_package_share_directory("autonomous_robot");
-    std::string bag_filename = package_share_directory + "/ros_bags/localization";
+    std::string bag_filename = package_share_directory + "/ros_bags/navigation";
 
     rosbag2_cpp::Reader reader1;
     rclcpp::Serialization<geometry_msgs::msg::PoseWithCovarianceStamped> serialization_amcl_pose;
@@ -30,38 +30,29 @@ TEST(LocalizerAndNavigation, TestLocalization)
         break;
     }
 
-    rosbag2_cpp::Reader reader2;
-    rclcpp::Serialization<nav_msgs::msg::Odometry> serialization_odometry;
-    nav_msgs::msg::Odometry::SharedPtr odometry_msg = std::make_shared<nav_msgs::msg::Odometry>();
-    reader2.open(bag_filename);
-
-    // while (reader2.has_next()) {
-    //     rosbag2_storage::SerializedBagMessageSharedPtr msg = reader2.read_next();
-    //     if (msg->topic_name != "/odom") {
-    //         continue;
-    //     }
-    //     rclcpp::SerializedMessage serialized_msg(*msg->serialized_data);
-    //     serialization_odometry.deserialize_message(&serialized_msg, odometry_msg.get());
-    //     break;
-    // }
-
     geometry_msgs::msg::Pose bag_amcl_pose = amcl_pose_msg->pose.pose;
-    // nav_msgs::msg::Odometry bag_odometry = *odometry_msg;
 
-    // Ground Truths
-    double ground_truth_x = 0.0;
-    double ground_truth_y = 0.0;
-    double ground_truth_z = 0.0;
+    // Goal Position
+    double goal_x = -0.7895557742337819;
+    double goal_y = 11.605891467846984;
+    double goal_z = 0.0;
+
+    // Goal Orientation
+    double goal_qx = 0.0;
+    double goal_qy = 0.0;
+    double goal_qz = 0.8157913526932744;
+    double goal_qw = 0.5783463226051304;
 
     double tolerance = 0.5;
 
-    // ASSERT_NEAR(bag_amcl_pose.position.x, bag_odometry.pose.pose.position.x, tolerance);
-    // ASSERT_NEAR(bag_amcl_pose.position.y, bag_odometry.pose.pose.position.y, tolerance);
-    // ASSERT_NEAR(bag_amcl_pose.position.z, bag_odometry.pose.pose.position.z, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.position.x, goal_x, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.position.y, goal_y, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.position.z, goal_z, tolerance);
 
-    ASSERT_NEAR(bag_amcl_pose.position.x, ground_truth_x, tolerance);
-    ASSERT_NEAR(bag_amcl_pose.position.y, ground_truth_y, tolerance);
-    ASSERT_NEAR(bag_amcl_pose.position.z, ground_truth_z, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.orientation.x, goal_qx, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.orientation.y, goal_qy, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.orientation.z, goal_qz, tolerance);
+    ASSERT_NEAR(bag_amcl_pose.orientation.w, goal_qw, tolerance);
 
 }
 

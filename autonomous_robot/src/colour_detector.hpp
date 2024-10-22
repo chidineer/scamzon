@@ -22,6 +22,7 @@ public:
     };
 
     ProductColour detectBox(const sensor_msgs::msg::Image::SharedPtr msg);
+    void drawDetectedColor(cv::Mat &image, const std::string &color);
     
 
 private:

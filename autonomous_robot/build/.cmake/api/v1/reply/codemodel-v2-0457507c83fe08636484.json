@@ -1,0 +1,202 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-e085fcbe0bbdc928b2fe.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						9,
+						10,
+						11,
+						12
+					]
+				},
+				{
+					"build" : "gtest",
+					"jsonFile" : "directory-gtest-Debug-a2408fe1a73b92c5e636.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "/opt/ros/humble/src/gtest_vendor",
+					"targetIndexes" : 
+					[
+						7,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "autonomous_robot",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						9,
+						10,
+						11,
+						12
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "gtest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CATALOGUING::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CATALOGUING-Debug-f216f5ab2bdca5f84e14.json",
+					"name" : "CATALOGUING",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "LOCALIZATION::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-LOCALIZATION-Debug-1c04f16e1eddcc125fc8.json",
+					"name" : "LOCALIZATION",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "NAVIGATION::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-NAVIGATION-Debug-48699d9efef3e3f2f44e.json",
+					"name" : "NAVIGATION",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "TASKALLOCATION::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-TASKALLOCATION-Debug-b4d8ac52bc446609170e.json",
+					"name" : "TASKALLOCATION",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "autonomous_mapping::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-autonomous_mapping-Debug-22e7e7101abd1d57db99.json",
+					"name" : "autonomous_mapping",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "autonomous_robot_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-autonomous_robot_uninstall-Debug-5b7267eb88579a206619.json",
+					"name" : "autonomous_robot_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "colour_detector::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-colour_detector-Debug-b23d52b46f065ea8e8c1.json",
+					"name" : "colour_detector",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gtest::@0af4add9fe94340e763e",
+					"jsonFile" : "target-gtest-Debug-5b4329108bd3f5685969.json",
+					"name" : "gtest",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gtest_main::@0af4add9fe94340e763e",
+					"jsonFile" : "target-gtest_main-Debug-050ba6fdffc3803a0174.json",
+					"name" : "gtest_main",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "localizer_and_navigation::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-localizer_and_navigation-Debug-00a399da7919a75f3471.json",
+					"name" : "localizer_and_navigation",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "localizer_and_navigation_library::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-localizer_and_navigation_library-Debug-6e108bc6c7a690dbfb84.json",
+					"name" : "localizer_and_navigation_library",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tsp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tsp-Debug-539ab33eff54db341c3d.json",
+					"name" : "tsp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-0754e483fb599ed5ded7.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/student/ros2_ws/src/autonomous_robot/build",
+		"source" : "/home/student/ros2_ws/src/autonomous_robot"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

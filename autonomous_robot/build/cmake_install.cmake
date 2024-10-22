@@ -83,10 +83,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/autonomous_robot" TYPE STATIC_LIBRARY FILES "/home/student/ros2_ws/src/autonomous_robot/build/libcylinder_detector.a")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/autonomous_robot" TYPE STATIC_LIBRARY FILES "/home/student/ros2_ws/src/autonomous_robot/build/libcolour_detector.a")
 endif()
 
@@ -96,14 +92,6 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/autonomous_robot" TYPE STATIC_LIBRARY FILES "/home/student/ros2_ws/src/autonomous_robot/build/liblocalizer_and_navigation_library.a")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/autonomous_robot" TYPE DIRECTORY FILES "/home/student/ros2_ws/src/autonomous_robot/launch")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/autonomous_robot" TYPE DIRECTORY FILES "/home/student/ros2_ws/src/autonomous_robot/config")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

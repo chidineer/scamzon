@@ -7,16 +7,18 @@
 
 class tsp {
 public:
-    tsp();
+    tsp(geometry_msgs::msg::Pose start);
     
     // Returns a vector of indices representing the optimized order
-    std::vector<unsigned int> optimizePath(const geometry_msgs::msg::PoseArray &poses);
+    std::vector<unsigned int> optimizePath(geometry_msgs::msg::PoseArray &poses);
 
     // Returns a vector of poses in the optimized order
     std::vector<geometry_msgs::msg::Pose> mapGoalsToOptimizedOrder(const geometry_msgs::msg::PoseArray &poses, const std::vector<unsigned int> &optimized_indices);
 
 private:
     double calculateDistance(const geometry_msgs::msg::Pose &a, const geometry_msgs::msg::Pose &b);
+
+    geometry_msgs::msg::Pose start_;
 };
 
 #endif // TSP_HPP
