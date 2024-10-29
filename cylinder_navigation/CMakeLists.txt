@@ -14,9 +14,12 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
+find_package(gazebo_msgs REQUIRED)
 
 # Add your node executable (ensure this is only defined once)
 add_executable(cylinder_navigation_node src/cylinder_navigation_node.cpp)
+add_executable(cylinder_detector src/cylinder_detector.cpp)
+add_executable(place_cylinder src/place_cylinder.cpp)
 
 # Link against required libraries
 ament_target_dependencies(cylinder_navigation_node
@@ -32,10 +35,27 @@ ament_target_dependencies(cylinder_navigation_node
   sensor_msgs
   visualization_msgs
 )
+ament_target_dependencies(cylinder_detector
+  rclcpp
+  sensor_msgs
+  visualization_msgs
+  tf2
+  tf2_geometry_msgs
+  geometry_msgs
+  std_msgs
+)
+ament_target_dependencies(place_cylinder
+  rclcpp
+  gazebo_msgs
+  geometry_msgs
+  std_msgs
+)
 
 
 install(TARGETS
   cylinder_navigation_node
+  cylinder_detector
+  place_cylinder
   DESTINATION lib/${PROJECT_NAME}
 )
 

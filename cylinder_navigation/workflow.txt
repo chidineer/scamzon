@@ -1,0 +1,20 @@
+# Compile 
+colcon build --symlink-install --packages-select cylinder_navigation
+
+# Launch World
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 launch turtlebot3_gazebo turtlebot3_warehouse.launch.py use_sim_time:=true
+
+# Localisation and Navigation
+ros2 run autonomous_robot localizer_and_navigation 0.0 0.0 0.0
+
+# Place cylinder object in gazebo
+ros2 run cylinder_navigation place_cylinder
+
+# Start detection node
+ros2 run cylinder_navigation cylinder_detection
+
+# Start navigation node
+ros2 run cylinder_navigation cylinder_navigation_node
+
+# Set a Nav goal in RViz to Start

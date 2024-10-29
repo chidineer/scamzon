@@ -30,6 +30,7 @@ public:
 private:
 
     enum class State {
+        WAITING_FOR_GOAL,
         WAITING_FOR_CYLINDER,
         STOP_NAVIGATION,
         CREATE_WAYPOINTS,
@@ -38,16 +39,17 @@ private:
         RETURN_TO_ORIGINAL_GOAL,
     };
 
-    State state_ = State::WAITING_FOR_CYLINDER;
+    State state_ = State::WAITING_FOR_GOAL;
     rclcpp::Subscription<visualization_msgs::msg::Marker>::SharedPtr cylinder_detected_sub_;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr amcl_pose_sub_;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr plan_sub_;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr goal_pub_;
     rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr waypoints_pub_;
     rclcpp_action::Client<nav2_msgs::action::NavigateToPose>::SharedPtr client_;
+    rclcpp::TimerBase::SharedPtr timer_;
     
 
-    bool first_time_flag_ = true;
+    bool first_detection_flag_ = true;
     bool waypoints_finished_ = false;
     std::mutex mtx_;
     std::mutex feedback_mutex_;
@@ -65,12 +67,15 @@ private:
     int num_waypoints_; //adjust as necessary (goes back to first waypoint)
     std::shared_ptr<nav_msgs::msg::Path> plan_msg_;
     bool first_plan_flag_ = true;
+    bool amcl_updated_flag_ = false;
 
     void cylinderDetectedCallback(const visualization_msgs::msg::Marker::SharedPtr msg);
 
     void amclPoseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
 
     void planCallback(const nav_msgs::msg::Path::SharedPtr msg);
+
+    void timer_callback();
 
     void updateState();
 

@@ -33,25 +33,28 @@ CylinderNavigationNode::CylinderNavigationNode() : Node("cylinder_navigation_nod
     // Action client for navigation
     client_ = rclcpp_action::create_client<nav2_msgs::action::NavigateToPose>(this, "navigate_to_pose");
 
+    // Timer callback for running state machine
+    timer_ = this->create_wall_timer(std::chrono::seconds(1), std::bind(&CylinderNavigationNode::timer_callback, this));
+
 
 }
 
 void CylinderNavigationNode::cylinderDetectedCallback(const visualization_msgs::msg::Marker::SharedPtr msg)
 {
     // std::lock_guard<std::mutex> lock(mtx_);
-    // Only run once when cylinder is detected first time (or this will continue happening as it leaves)
-    if (first_time_flag_)
+    // Only run once when cylinder is detected first time AND navigation has started(or this will continue happening as it navigates)
+    if (first_detection_flag_ && (state_ == State::WAITING_FOR_CYLINDER) && amcl_updated_flag_)
     {
         cylinder_pose_ = robotToMapPose(msg->pose); //For pose that is in robot ref frame
+        // cylinder_pose_ = msg->pose;
+    
+        RCLCPP_INFO(this->get_logger(), "cylinder_pose_: (x: %.2f, y: %.2f)",
+                    cylinder_pose_.position.x, cylinder_pose_.position.y);
+                
         state_ = State::STOP_NAVIGATION;
         RCLCPP_INFO(this->get_logger(), "STOP_NAVIGATION");
-        first_time_flag_ = false; //this stays false so navigation isn't triggered again after multiple detections
-    }
-
-    if (!first_time_flag_)
-    {
-        updateState();
-    }      
+        first_detection_flag_ = false; //this stays false so navigation isn't triggered again after multiple detections
+    }   
 
     
 }
@@ -59,10 +62,11 @@ void CylinderNavigationNode::cylinderDetectedCallback(const visualization_msgs::
 void CylinderNavigationNode::amclPoseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
     // std::lock_guard<std::mutex> lock(mtx_);
+    amcl_updated_flag_ = true;
     last_amcl_pose_ = msg->pose.pose; // Store the last AMCL pose
     //Debugging
-    RCLCPP_INFO(this->get_logger(), "last_amcl_pose:  (x: %f, y: %f)", 
-                last_amcl_pose_.position.x, last_amcl_pose_.position.y);
+    RCLCPP_INFO(this->get_logger(), "last_amcl_pose:  (x: %.2f, y: %.2f, yaw: %.2f)", 
+                last_amcl_pose_.position.x, last_amcl_pose_.position.y, quatToYaw(last_amcl_pose_.orientation));
 }
 
 void CylinderNavigationNode::planCallback(const nav_msgs::msg::Path::SharedPtr msg)
@@ -72,7 +76,7 @@ void CylinderNavigationNode::planCallback(const nav_msgs::msg::Path::SharedPtr m
 
     std::vector<geometry_msgs::msg::PoseStamped> plan_poses = msg->poses;
     //Debugging
-    // RCLCPP_INFO(this->get_logger(), "plan_msgs_ last pose:  (x: %f, y: %f)", 
+    // RCLCPP_INFO(this->get_logger(), "plan_msgs_ last pose:  (x: %.2f, y: %.2f)", 
     //             plan_poses.back().pose.position.x, plan_poses.back().pose.position.y);
 
     if (first_plan_flag_)
@@ -83,17 +87,29 @@ void CylinderNavigationNode::planCallback(const nav_msgs::msg::Path::SharedPtr m
         original_goal_ = first_plan_poses.back().pose;
 
         //Debugging
-        RCLCPP_INFO(this->get_logger(), "original_goal_:  (x: %f, y: %f)", 
+        RCLCPP_INFO(this->get_logger(), "original_goal_:  (x: %.2f, y: %.2f)", 
                     original_goal_.position.x, original_goal_.position.y);
 
+        //Start to navigate to goal and waits for a cylinder pose
+        state_ = State::WAITING_FOR_CYLINDER;
+        updateState();
     }
     
+}
+
+void CylinderNavigationNode::timer_callback() {
+    updateState();
 }
 
 void CylinderNavigationNode::updateState() {
     RCLCPP_INFO(this->get_logger(), "Updating state!");
 
     switch (state_) {
+
+        case State::WAITING_FOR_GOAL:
+            RCLCPP_INFO(this->get_logger(), "WAITING_FOR_GOAL");
+            // Remain in this state until a goal/plan is created
+            break;
 
         case State::WAITING_FOR_CYLINDER:
             RCLCPP_INFO(this->get_logger(), "WAITING_FOR_CYLINDER");
@@ -118,8 +134,6 @@ void CylinderNavigationNode::updateState() {
             // cylinder_pose_.orientation.y = 0;
             // cylinder_pose_.orientation.z = 0;
             // cylinder_pose_.orientation.w = 1;
-            RCLCPP_INFO(this->get_logger(), "cylinder_pose_: (x: %f, y: %f)",
-                        cylinder_pose_.position.x, cylinder_pose_.position.y);
 
             // Create waypoints around cylinder
             state_ = State::CREATE_WAYPOINTS;
@@ -145,10 +159,10 @@ void CylinderNavigationNode::updateState() {
         case State::MONITOR_WAYPOINTS:
             if (waypoints_finished_) {
                 stopNavigation();
+                //publish original goal to return to navigation
                 publishOriginalGoal(original_goal_.position.x, original_goal_.position.y, quatToYaw(original_goal_.orientation));
-                RCLCPP_INFO(this->get_logger(), "Returning to original goal");
-                state_ = State::WAITING_FOR_CYLINDER; // Reset to initial state
-                RCLCPP_INFO(this->get_logger(), "WAITING_FOR_CYLINDER");
+                state_ = State::RETURN_TO_ORIGINAL_GOAL;
+                RCLCPP_INFO(this->get_logger(), "RETURN_TO_ORIGINAL_GOAL");
             } else {
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time_);
@@ -157,6 +171,21 @@ void CylinderNavigationNode::updateState() {
                     start_time_ = current_time; // Reset the start time
                 }
             }
+            break;
+        
+        case State::RETURN_TO_ORIGINAL_GOAL:
+            double distance_to_goal = linearDistance(original_goal_, last_amcl_pose_);
+            if (distance_to_goal <= threshold_)
+            {
+                //Reset for new goal/objects
+                first_detection_flag_ = true;
+                first_plan_flag_ = false;
+                waypoints_finished_ = false;
+                //Go back to waiting for goal
+                state_ = State::WAITING_FOR_GOAL;
+                RCLCPP_INFO(this->get_logger(), "WAITING_FOR_GOAL");
+            }
+            
             break;
     }
 }
@@ -168,7 +197,7 @@ void CylinderNavigationNode::stopNavigation(){
     goal_msg.header.frame_id = "map";  // Make sure to set the correct frame
     goal_msg.pose = newPoseAtDistance(last_amcl_pose_, 0.2); //a little ahead of current pose to make up for delay
     goal_pub_->publish(goal_msg);
-        RCLCPP_INFO(this->get_logger(), "Stopping Navigation at: (x: %f, y: %f)",
+        RCLCPP_INFO(this->get_logger(), "Stopping Navigation at: (x: %.2f, y: %.2f)",
                     goal_msg.pose.position.x, goal_msg.pose.position.y);
 
     //Wait for turtlebot to stop or waypoints won't be published
@@ -186,7 +215,7 @@ void CylinderNavigationNode::publishOriginalGoal(float x, float y, float yaw)
     original_pose_msg.pose = original_goal_;
 
     goal_pub_->publish(original_pose_msg);
-        RCLCPP_INFO(this->get_logger(), "Published goal to /goal_pose: (x: %f, y: %f)",
+        RCLCPP_INFO(this->get_logger(), "Published goal to /goal_pose: (x: %.2f, y: %.2f)",
                     original_pose_msg.pose.position.x, original_pose_msg.pose.position.y);
 
 }
@@ -210,7 +239,7 @@ void CylinderNavigationNode::createWaypointsAroundCylinder()
     }
     
     
-    RCLCPP_INFO(this->get_logger(), "x_diff: %f, y_diff: %f, angle_to_cylinder: %f", x_diff, y_diff, angle_to_cylinder);
+    // RCLCPP_INFO(this->get_logger(), "x_diff: %.2f, y_diff: %.2f, angle_to_cylinder: %.2f", x_diff, y_diff, angle_to_cylinder);
     
 
     for (int i = 0; i < num_waypoints_; ++i) // Create waypoints
@@ -237,7 +266,7 @@ void CylinderNavigationNode::createWaypointsAroundCylinder()
         waypoints_.push_back(waypoint); 
 
         //Debugging
-        RCLCPP_INFO(this->get_logger(), "Waypoint %d: x: %f, y:, %f, angle: %f, cos: %f, sin: %f",
+        RCLCPP_INFO(this->get_logger(), "Waypoint %d: x: %.2f, y:, %.2f, angle: %.2f, cos: %.2f, sin: %.2f",
                         (i+1), waypoint.pose.position.x, waypoint.pose.position.y, angle, cos(angle), sin(angle));
     }
     
@@ -287,7 +316,7 @@ void CylinderNavigationNode::feedback_callback(rclcpp_action::ClientGoalHandle<n
 {
     if (feedback) {
         feedback_ = feedback;
-        // RCLCPP_INFO(this->get_logger(), "Feedback received: %f distance remaining", feedback->distance_remaining);
+        // RCLCPP_INFO(this->get_logger(), "Feedback received: %.2f distance remaining", feedback->distance_remaining);
     } else {
         RCLCPP_WARN(this->get_logger(), "Received null feedback!");
     }
@@ -319,10 +348,10 @@ void CylinderNavigationNode::checkWaypointsFinished()
         double distance = linearDistance(last_amcl_pose_, last_pose.pose);
 
         //Debugging
-        RCLCPP_INFO(this->get_logger(), "distance vs threshold: %f/%f",
+        RCLCPP_INFO(this->get_logger(), "distance vs threshold: %.2f/%.2f",
                     distance, threshold_);
         // //Debugging
-        RCLCPP_INFO(this->get_logger(), "distance remaining: %f",
+        RCLCPP_INFO(this->get_logger(), "distance remaining: %.2f",
                     feedback_->distance_remaining);
 
 
@@ -423,9 +452,12 @@ geometry_msgs::msg::Pose CylinderNavigationNode::newPoseAtDistance(const geometr
 geometry_msgs::msg::Pose CylinderNavigationNode::robotToMapPose(geometry_msgs::msg::Pose robot_frame_pose){
     geometry_msgs::msg::Pose map_frame_pose = robot_frame_pose;
     // Extract the orientation from the robot frame pose
+    // Bug: if last_amcl_pose_ has no time to update this will be wrong
+    
     double robot_x = last_amcl_pose_.position.x;
     double robot_y = last_amcl_pose_.position.y;
-    double robot_theta = quatToYaw(robot_frame_pose.orientation); // Get the yaw from the quaternion
+    double robot_theta = quatToYaw(last_amcl_pose_.orientation); // Get the yaw from the quaternion
+    RCLCPP_INFO(this->get_logger(), "robot_theta: %.2f", robot_theta);
 
     // Calculate the new position in the map frame
     map_frame_pose.position.x = robot_x + (robot_frame_pose.position.x * cos(robot_theta)) - (robot_frame_pose.position.y * sin(robot_theta));
